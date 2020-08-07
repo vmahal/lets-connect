@@ -1,15 +1,16 @@
 import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import Experience from './Experience';
 import Education from './Education';
 import DashboardActions from './DashboardActions';
+import MyPosts from './MyPosts';
 
 const Dashboard = ({
-  auth: { user },
+  auth: { token, user },
   getCurrentProfile,
   profile: { profile, loading },
   deleteAccount,
@@ -18,46 +19,69 @@ const Dashboard = ({
     getCurrentProfile();
   }, [getCurrentProfile]);
 
-  return loading && profile === null ? (
+
+  return token ? (loading && profile === null ? (
     <Spinner />
   ) : (
-    <Fragment>
-      <div class='profile-top bg-primary p-2' class='box'>
-        <div className='my-1'>
-          {' '}
-          <img class='round-img' class='imgb' src={user.avatar} alt='' />
-        </div>
-        <div>
-          {' '}
-          <p className='lead' style={{ color: 'white' }}>
-            <b> Welcome, {user && user.name}</b>
-          </p>
-        </div>
-      </div>
+      <Fragment>
+        <div className='profile-top bg-primary p-2' className='box'>
+          <div className='my-1'>
+            {' '}
 
-      {profile !== null ? (
-        <Fragment>
-          <DashboardActions />
-          <Experience experience={profile.experience}></Experience>
-          <Education education={profile.education}></Education>
+            {profile === null && <img className='round-img' className='imgb' src={user && user.avatar} alt='' />}
+            {profile !== null && <img className='round-img' className='imgb' src={profile.images.picture && profile.images.picture} alt='' />}
 
-          <div className='my-2'>
-            <button className='btn btn-danger' onClick={() => deleteAccount()}>
-              <i className='fas fa-user-minus'></i>
-              Delete My Account
-            </button>
           </div>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <p>You have not yet setup a profile , Please add some info</p>
-          <Link to='/create-profile' className='btn btn-primary my-1'>
-            Create profile
+          <div>
+            {' '}
+            <p className='lead' style={{ color: 'white' }}>
+              <b> Welcome, {user && user.name}</b>
+            </p>
+          </div>
+          {profile !== null && <p>
+
+            <Link className='ava-style' style={{ color: "white", border: "1px solid", borderColor: "white", padding: '5px' }} to='/upload-images'>
+              Add avatar
+</Link>
+
+          </p>}
+
+        </div>
+
+        {profile !== null ? (
+          <Fragment>
+            <DashboardActions />
+            <MyPosts></MyPosts>
+            <Experience experience={profile.experience}></Experience>
+            <Education education={profile.education}></Education>
+
+            <div className='my-2'>
+              <button className='btn btn-danger' onClick={() => deleteAccount()}>
+                <i className='fas fa-user-minus'></i>
+                Delete My Account
+            </button>
+            </div>
+          </Fragment>
+        ) : (
+            <Fragment>
+              <p>You have not yet setup a profile , Please add some info</p>
+              <Link to='/create-profile' className='btn btn-primary my-1'>
+                Create profile
           </Link>
-        </Fragment>
-      )}
-    </Fragment>
-  );
+              <div className='my-2'>
+                <button className='btn btn-danger' onClick={() => deleteAccount()}>
+                  <i className='fas fa-user-minus'></i>
+                  Delete My Account
+            </button>
+              </div>
+            </Fragment>
+          )}
+      </Fragment>
+    )) : (
+      <Redirect to='/login'></Redirect>
+    );
+
+
 };
 
 Dashboard.propTypes = {

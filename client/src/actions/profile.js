@@ -8,6 +8,9 @@ import {
   CLEAR_PROFILE,
   GET_PROFILES,
   GET_REPOS,
+  // SET_IMG,
+  // GET_IMG,
+  // IMG_ERROR,
 } from './types';
 
 //Get current users profile
@@ -31,6 +34,7 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
   }
 };
+
 
 //get all profiles
 export const getProfiles = () => async (dispatch) => {
@@ -293,5 +297,36 @@ export const deleteAccount = () => async (dispatch) => {
         },
       });
     }
+  }
+};
+
+
+// Send the url of uploaded avatar (to Cloudinary) to MongoDB.
+export const uploadAvatar = (images, history) => async dispatch => {
+  try {
+    console.log('action');
+    console.log('images', images);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const res = await axios.post('/api/profile/avatar', images, config);
+    // console.log('status: ', res.status);
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data
+    });
+    dispatch(setAlert('Avatar Picture Updated', 'success'));
+    history.push('/dashboard');
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
 };

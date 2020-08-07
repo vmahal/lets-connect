@@ -8,8 +8,8 @@ const request = require('request');
 const User = require('../../models/User');
 const Profile = require('../../models/Profile');
 const Post = require('../../models/Post');
-//@accees private
 
+//@accees private
 //getting current users own profile
 router.get('/me', auth, async (req, res) => {
   try {
@@ -311,9 +311,9 @@ router.get('/github/:username', (req, res) => {
     const options = {
       uri: `https://api.github.com/users/${
         req.params.username
-      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
-        'githubClientID'
-      )}&client_secret=${config.get('githubSecret')}`,
+        }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+          'githubClientID'
+        )}&client_secret=${config.get('githubSecret')}`,
 
       method: 'GET',
 
@@ -337,4 +337,63 @@ router.get('/github/:username', (req, res) => {
   }
 });
 
+const cloudinary = require('cloudinary');
+
+cloudinary.config({
+  cloud_name: config.get('cloud_name'),
+  api_key: config.get('api_key'),
+  api_secret: config.get('api_secret')
+});
+
+
+//@route POST api/profile/avatar
+//@desc upload avatar for profile
+//@access private
+
+router.post('/avatar', auth, async (req, res) => {
+  try {
+    // console.log("server: req.body:  ", req.body);
+    let profile = await Profile.findOne({ user: req.user.id });
+    //    let posts = await Post.find({ user: req.user.id });
+    profile.images.picture = req.body.picture;
+
+    // if (posts) {
+    //   posts.map(posts => (posts.picture = req.body.picture))
+    // } else {
+    //   console.log('no posts');
+    // }
+    // if (posts.likes) {
+    //   posts.likes.map((item) => (item.picture = req.body.picture))
+    // } else {
+    //   console.log('no likes');
+
+    // }
+    // if (posts.comments) {
+    //   posts.comments.map(comments => (comments.picture = req.body.picture))
+    // } else {
+    //   console.log('no comments');
+
+    // }
+
+
+    await profile.save();
+
+
+
+
+    //console.log("changed profile:", profile);
+    return res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
+
+
+
 module.exports = router;
+
+
+

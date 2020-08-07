@@ -12,27 +12,28 @@ import CommentForm from '../post/CommentForm';
 const Post = ({ getPost, post: { post, loading }, match }) => {
   useEffect(() => {
     getPost(match.params.id);
-  }, [getPost]);
+  }, [getPost, match.params.id]);
 
   return loading || post === null ? (
     <Spinner></Spinner>
   ) : (
-    <Fragment>
-      <Link to='/posts' className='btn btn-primary'>
-        Back to posts
+      <Fragment>
+        <Link to='/posts' className='btn btn-primary'>
+          Back to posts
       </Link>
-      <PostItem post={post} showActions={false} />
-      <CommentForm postId={post._id} />
 
-      {post.comments.map((comment) => (
-        <CommentItem
-          key={comment._id}
-          comment={comment}
-          postId={post._id}
-        ></CommentItem>
-      ))}
-    </Fragment>
-  );
+        <PostItem post={post} showActions={false} />
+        <CommentForm postId={post._id} />
+
+        {post.comments.map((comment) => (
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            postId={post._id}
+          ></CommentItem>
+        ))}
+      </Fragment>
+    );
 };
 
 Post.propTypes = {

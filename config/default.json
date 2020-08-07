@@ -2,5 +2,8 @@
   "mongoURI": "mongodb+srv://admin:admin@devconnect-u8yz6.mongodb.net/<dbname>?retryWrites=true&w=majority",
   "jwtSecret": "my secret",
   "githubClientID": "41c82a1248d8ceeb21ae",
-  "githubSecret": "2d07fc06c1b443cf997ee658af68a665c5021096"
+  "githubSecret": "2d07fc06c1b443cf997ee658af68a665c5021096",
+  "cloud_name": "vmdc",
+  "api_key": "323917572855851",
+  "api_secret": "HT7ab-ofEvWY7ax4D32oZujX-a4"
 }

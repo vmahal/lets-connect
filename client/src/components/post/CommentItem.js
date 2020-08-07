@@ -1,27 +1,32 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { removeComment } from '../../actions/post';
+import other from '../layout/otheruser.png';
+import my from '../layout/record.PNG';
 
 const CommentItem = ({
   postId,
-  comment: { _id, avatar, name, text, date, user },
+  comment: { _id, avatar, picture, name, text, date, user },
   auth,
   removeComment,
 }) => {
   return (
-    <div class='post bg-white p-1 my-1'>
+    <div className='post bg-white p-1 my-1'>
       <div>
         <Link to={`/profile/${user}`}>
-          <img class='round-img' src={avatar} alt='' />
+          {!auth.loading && user === auth.user._id ? <img className='round-img' src={my} alt='' /> :
+            <img className='round-img' src={other} alt='' />}
+          {/* <img className='round-img' src={picture === '' ? avatar : picture} alt='' />
+          */}
           <h4>{name}</h4>
         </Link>
       </div>
       <div>
-        <p class='my-1'>{text}</p>
-        <p class='post-date'>
+        <p className='my-1'>{text}</p>
+        <p className='post-date'>
           Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
         </p>
         <div>
@@ -29,9 +34,9 @@ const CommentItem = ({
             <button
               onClick={(e) => removeComment(postId, _id)}
               type='button'
-              class='btn btn-danger'
+              className='btn btn-danger'
             >
-              <i class='fas fa-times'></i>
+              <i className='fas fa-times'></i>
             </button>
           )}
         </div>

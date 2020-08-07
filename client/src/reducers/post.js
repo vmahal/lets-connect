@@ -1,16 +1,19 @@
 import {
   GET_POSTS,
   GET_POST,
+  GETMY_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POSTS,
   ADD_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
+  PERSONAL_POSTS,
 } from '../actions/types';
 
 const initialState = {
   posts: [],
+  myposts: [],
   post: null,
   loading: true,
   error: {},
@@ -31,6 +34,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         post: payload,
+        loading: false,
+      };
+    case PERSONAL_POSTS:
+    case GETMY_POSTS:
+      return {
+        ...state,
+        myposts: payload,
         loading: false,
       };
 
@@ -79,6 +89,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: state.posts.filter((post) => post._id !== payload),
+        myposts: state.myposts.filter((post) => post._id !== payload),
         loading: false,
       };
 

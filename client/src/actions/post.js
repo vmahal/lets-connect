@@ -1,6 +1,8 @@
 import {
   GET_POSTS,
   GET_POST,
+  GETMY_POSTS,
+  PERSONAL_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
   DELETE_POSTS,
@@ -27,7 +29,39 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
-//Get post by user id
+//get posts by user id
+export const getUserPost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/mypost/${id}`);
+    dispatch({
+      type: GETMY_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+//get posts by user id
+export const getMyPost = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/api/posts/posted');
+    dispatch({
+      type: PERSONAL_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+//Get post by  id
 export const getPost = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/posts/${id}`);
@@ -123,7 +157,7 @@ export const addComment = (postid, text) => async (dispatch) => {
 //Remove Comments
 export const removeComment = (postid, commentid) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/posts/comment/${postid}/${commentid}`);
+    await axios.delete(`/api/posts/comment/${postid}/${commentid}`);
 
     dispatch({
       type: REMOVE_COMMENT,
@@ -142,7 +176,7 @@ export const removeComment = (postid, commentid) => async (dispatch) => {
 //Delete posts
 export const deletePost = (id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/posts/${id}`);
+    await axios.delete(`/api/posts/${id}`);
     dispatch({
       type: DELETE_POSTS,
       payload: id,

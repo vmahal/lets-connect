@@ -8,7 +8,6 @@ const { check, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
 
 const User = require('../../models/User');
-const { findOneAndUpdate } = require('../../models/User');
 
 // @route    POST api/users
 // @desc     Register user
@@ -77,6 +76,7 @@ router.post(
           res.json({ token });
         }
       );
+
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');

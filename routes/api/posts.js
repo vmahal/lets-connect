@@ -19,11 +19,12 @@ router.post(
     }
     try {
       const user = await User.findById(req.user.id).select('-password');
-
+      //const profile = await Profile.findOne({ user: req.user.id });
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
+        //picture: profile.images.picture,
         user: req.user.id,
       });
 
@@ -46,9 +47,42 @@ router.get('/', auth, async (req, res) => {
     res.json(posts);
   } catch (error) {
     console.error(err.message);
-    res;
+    res.status(500).send('Server Error');
   }
 });
+
+//get all posts by user id
+//@access private
+router.get('/mypost/:userid', auth, async (req, res) => {
+  try {
+    const posts = await Post.find({ user: req.params.userid });
+    if (!posts) {
+      return res.status(404).json({ msg: 'User didnt posted anything' });
+    }
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+//get all posts of a particular user
+//@access private
+router.get('/posted', auth, async (req, res) => {
+  try {
+    const myposts = await Post.find({ user: req.user.id });
+    if (!myposts) {
+      return res.status(404).json({ msg: 'User didnt posted anything' });
+    }
+    res.json(myposts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 
 //get posts by id
 //@access private
@@ -100,6 +134,7 @@ router.delete('/:id', auth, async (req, res) => {
 router.put('/like/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    //const profile = await Profile.findOne({ user: req.user.id });
 
     //check post has already been liked by user
     if (
@@ -109,7 +144,13 @@ router.put('/like/:id', auth, async (req, res) => {
       return res.status(400).json({ msg: 'post already liked' });
     }
 
-    post.likes.unshift({ user: req.user.id });
+    const user = await User.findById(req.user.id);
+    post.likes.unshift({
+      user: req.user.id,
+      name: user.name,
+      avatar: user.avatar,
+      //picture: profile.images.picture
+    });
 
     await post.save();
 
@@ -120,7 +161,15 @@ router.put('/like/:id', auth, async (req, res) => {
   }
 });
 
-//likes
+
+//get all likes
+//@access private
+router.get('/getlikes/:id', auth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  res.json(post.likes);
+})
+
+//unlikes
 //@access private
 router.put('/unlike/:id', auth, async (req, res) => {
   try {
@@ -162,7 +211,7 @@ router.post(
     }
     try {
       const user = await User.findById(req.user.id).select('-password');
-
+      const profile = await Profile.findOne({ user: req.user.id });
       console.log(user);
 
       const post = await Post.findById(req.params.id);
@@ -171,6 +220,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
+        picture: profile.images.picture,
         user: req.user.id,
       };
 
