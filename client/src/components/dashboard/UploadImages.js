@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { uploadAvatar, uploadCover } from '../../actions/profile';
+import { uploadAvatar } from '../../actions/profile';
 
-const UploadImages = ({ uploadAvatar, uploadCover, history }) => {
+const UploadImages = ({ uploadAvatar, history }) => {
     let images1 = { picture: '' };
     let myWidget1 = window.cloudinary.createUploadWidget(
         {
@@ -21,7 +21,6 @@ const UploadImages = ({ uploadAvatar, uploadCover, history }) => {
         }
     );
 
-    let images2 = { cover: '' };
 
     return (
         <Fragment>
