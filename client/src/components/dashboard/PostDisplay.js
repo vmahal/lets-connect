@@ -19,10 +19,10 @@ const PostDisplay = ({
 
   return (
 
-    <div className='post bg-white p-1 my-1'>
+    <div className='post bg-white p-1 my-1' style={{ gridGap: "0px" }}>
       <div>
         <Link to={`/profile/${userid}`}>
-          <img style={{ marginTop: '40px' }} src={mypost} alt='' />
+          <img style={{ width: "70px" }} src={mypost} alt='' />
         </Link>
       </div>
       <div>
@@ -62,7 +62,7 @@ const PostDisplay = ({
       <div >
         {showLikes && <Fragment>
           <p style={{ marginBottom: '6px' }}>Liked By </p>
-          {likes.map(like => (<div className='post bg-white p-1 my-1' style={{
+          {likes.map(like => (<div className='bg-white p-1 my-1' style={{
             width: '284px',
             height: '55px',
             borderWidth: '0px 0px 1px 0px',
@@ -73,13 +73,10 @@ const PostDisplay = ({
               <Link to={`/profile/${like.user}`}>
                 {!auth.loading && like.user === auth.user._id ? <img className='round-img' style={{ width: "45px" }} src={my} alt='' /> :
                   <img className='round-img' style={{ width: "45px" }} src={other} alt='' />}
-                {/* <img className='round-img' style={{ width: "45px" }} src={like.picture === '' ? like.avatar : like.picture} alt='' />
-               */}
               </Link>
-            </div>
-            <div>
-              <p className='my-1 '>{like.name} {' '} </p>
 
+              {' '}
+              {like.name} {' '}
             </div>
           </div>))}
         </Fragment>}

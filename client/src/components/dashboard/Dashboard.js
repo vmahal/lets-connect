@@ -28,8 +28,26 @@ const Dashboard = ({
           <div className='my-1'>
             {' '}
 
-            {profile === null && <img className='round-img' className='imgb' src={user && user.avatar} alt='' />}
-            {profile !== null && <img className='round-img' className='imgb' src={profile.images.picture && profile.images.picture} alt='' />}
+            {/* //             {profile === null && <img className='round-img' className='imgb' src={user && user.avatar} alt='' />}
+            {profile !== null && <img className='round-img' className='imgb' src={profile.images.picture ? profile.images.picture : user.avatar} alt='' />} */}
+
+            {profile !== null ? (
+              <img
+                className='round-img my-1'
+                style={{ width: '200px', borderRadius: '150%' }}
+                src={
+                  profile.images.picture ? profile.images.picture : user.avatar
+                }
+                alt=''
+              />
+            ) : (
+                <img
+                  className='round-img my-1'
+                  style={{ width: '150px' }}
+                  src={user && user.avatar}
+                  alt=''
+                />
+              )}
 
           </div>
           <div>
@@ -50,10 +68,19 @@ const Dashboard = ({
 
         {profile !== null ? (
           <Fragment>
-            <DashboardActions />
-            <MyPosts></MyPosts>
-            <Experience experience={profile.experience}></Experience>
-            <Education education={profile.education}></Education>
+            <div>
+              <DashboardActions />
+            </div>
+
+            <div style={{ borderBottom: "1px #ccc solid", paddingBottom: "30px" }}>
+              <MyPosts></MyPosts>
+            </div>
+            <div style={{ borderBottom: "1px #ccc solid", paddingBottom: "30px" }}>
+              <Experience experience={profile.experience}></Experience>
+            </div>
+            <div style={{ borderBottom: "1px #ccc solid", paddingBottom: "30px" }}>
+              <Education education={profile.education}></Education>
+            </div>
 
             <div className='my-2'>
               <button className='btn btn-danger' onClick={() => deleteAccount()}>

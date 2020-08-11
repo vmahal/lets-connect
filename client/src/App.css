@@ -8,13 +8,13 @@
 }
 
 .box {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 50px auto;
   background: #3bb4c1;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
   height: 430px;
-  padding-top: 20px;
+  
   /* padding-left: 70px; */
   text-align: center;
 }
@@ -61,7 +61,7 @@ img {
 
 /* Utilities */
 .container {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
